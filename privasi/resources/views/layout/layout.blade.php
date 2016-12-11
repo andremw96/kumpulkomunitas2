@@ -11,7 +11,7 @@
     <link rel="icon" href="../../favicon.ico">
 
     <!-- <title>{{ config('app.name', 'Kumpul Komunitas') }}</title> -->
-
+    <link rel="shortcut icon" href="img/logo.ico" />
     <title>Kumpul Komunitas</title>
 
     <!-- for calendar -->
@@ -253,7 +253,7 @@
                             <br>
                             <input type="hidden" name="userid" value="{{ Auth::user()->id }}">
                             <input type="hidden" name="username_id" value="{{ Auth::user()->username }}">
-                            <input type="submit" class="btn btn-success pull-right" value="Post">
+                            <input type="submit" class="btn btn-success pull-right" value="Tambahkan Thread">
                         </form><br>
                         <hr>
                         <a href="" class="pull-right">Keluar</a>

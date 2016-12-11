@@ -31,18 +31,37 @@ Route::get('/calendar','FrontControl@calendar');
 //Route::get('/logout','FrontControl@logout');
 //Route::get('/forum/{category}','ThreadController@GeneralDiscussion');
 
+Route::get('/forum','ThreadController@index');
+
 Route::get('/forum/{category}', function($categoryid){
 	$GenDisc = App\thread::where('category_id', '=', $categoryid)->get();
 
+	$namaKategori = App\category::where('id', '=', $categoryid)->get();
 
-    return view("forum/$categoryid", compact('GenDisc'));
+	$subKategoriii = App\category::where('parent_id', '=', $categoryid)->get();
+
+	$subcate=new App\subcategory;
+        
+    try {
+
+        $allSubCategories=$subcate->getCategories();
+        
+    } catch (Exception $e) {
+        
+        //no parent category found
+    }
+
+   // return view("forum/IsiKategori", compact("GenDisc"), compact("subKategoriii"), compact("namaKategori"));
+	return view("forum/IsiKategori", compact("GenDisc", "subKategoriii", "namaKategori", "allSubCategories"));
+	
 });
 
-Route::get('/content', 'ThreadController@show');
+Route::get('forum/content/{categoryid}/{post_id}', 'ThreadController@show');
 
 Route::get('/admin','FrontControl@admin');
 
 Route::post('/simpanthread','ThreadController@store');
+Route::post('/simpancomment','CommentController@store');
 
 /*Route::get('blade', function () 
 {

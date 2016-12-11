@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\thread;
+use App\comment;
+use App\subcategory;
+use App\category;
 //use Input;
 //use DB;
 use Redirect;
@@ -12,7 +15,7 @@ class ThreadController extends Controller
 {
    /* public function SimpanThread()
     {
-        /*$data = array(
+        $data = array(
             'title' => Input::get('title'),
             'content' => Input::get('content'),
             'user_id' => Input::get('userid'),
@@ -49,7 +52,19 @@ class ThreadController extends Controller
      */
     public function index()
     {
+        //$DaftarKategori = category::all();
+        $subcate=new subcategory;
         
+        try {
+
+            $allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        return view("/forum/DaftarKategori", compact('allSubCategories'));
     }
 
     /**
@@ -78,7 +93,8 @@ class ThreadController extends Controller
         $thread->category_id = $request->category;
         $thread->save();
 
-        return Redirect::to('/');
+        return Redirect::to("forum/content");
+        //return Redirect::back()->with('message','Thread Tersimpan');;
     }
 
     /**
@@ -87,11 +103,13 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($categoryid, $post_id)
     {
-        $IsiThread = thread::find($id);
+        $IsiThread = thread::where('post_id', '=', $post_id)->get();
+        $IsiComment = comment::where('post_id', '=', $post_id)->get();
+        $CariKategori = category::where('id', '=', $categoryid)->get();
 
-        return view("/content", compact('IsiThread'));
+        return view("forum/content", compact('IsiThread', 'IsiComment', 'CariKategori'));
     }
 
     /**
