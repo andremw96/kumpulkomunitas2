@@ -20,6 +20,7 @@ class CreateTblcommentTable extends Migration
                 $table->integer('post_id'); //foreign key ke tabel post
                 $table->timestamps();
                 $table->integer('user_id'); //foreign key 
+                $table->string('username');
                 $table->string('created_at_ip'); 
                 $table->string('updated_at_ip');
             }); 

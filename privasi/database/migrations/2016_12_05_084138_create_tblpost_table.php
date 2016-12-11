@@ -21,6 +21,7 @@ class CreateTblpostTable extends Migration
                 $table->timestamps();
                 $table->integer('category_id'); //foreign key
                 $table->integer('user_id'); //foreign key
+                $table->string('username');
                 $table->string('created_at_ip'); 
                 $table->string('updated_at_ip');
             }); 

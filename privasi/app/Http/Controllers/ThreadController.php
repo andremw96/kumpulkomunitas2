@@ -93,7 +93,11 @@ class ThreadController extends Controller
         $thread->category_id = $request->category;
         $thread->save();
 
-        return Redirect::to("forum/content");
+        $post_id = thread::all()->last()->post_id;
+        $categoryid = $thread->category_id;
+        $post_id = $thread->post_id;
+        //return Redirect::to("forum/content");
+        return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
         //return Redirect::back()->with('message','Thread Tersimpan');;
     }
 
@@ -118,9 +122,12 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($categoryid, $post_id)
     {
-        //
+        $IsiThread = thread::findOrFail($post_id); 
+        //$IsiThread = thread::where('post_id', '=', $post_id)->get();       
+        $CariKategori = category::where('id', '=', $categoryid)->get();
+        return view("forum/editcontent", compact('IsiThread', 'CariKategori'));
     }
 
     /**
@@ -130,9 +137,17 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($post_id, Request $request)
     {
-        //
+        $thread = thread::findOrFail($post_id);
+        $categoryid = $thread->category_id;
+        $post_id = $thread->post_id;
+        //$thread->content = $request->content;
+        $thread->update($request->all());
+       // $thread->save();
+      // return Redirect::to("forum/content");
+        return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
+
     }
 
     /**

@@ -243,8 +243,8 @@
                             <label>Kategori</label>
                               <select name="category" class="form-control">
                                   <option value="1">General Discussion</option>
-                                  <option value="8">General Discussion - The Lounge</option>
-                                  <option value="9">General Discussion - FAQ</option>
+                                  <option value="2">General Discussion - The Lounge</option>
+                                  <option value="3">General Discussion - FAQ</option>
                               </select>
                             <label>Judul Thread</label>
                               <input type="text" class="form-control" name="title" required>

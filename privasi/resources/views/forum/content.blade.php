@@ -13,13 +13,18 @@
 	         	<h3 class="panel-title">Judul Thread : {{ $JudulThread->title }} </h3>
 	         @endforeach()
 	    </div> 
+	    
 
 	    <div class="panel-body">
 	    	@foreach($IsiThread as $Isi)   
 	       		<label>Posted By: {{ $Isi -> username}} </label>    	
 	       		<label>Date time posted : {{ $Isi -> created_at}} </label>		       		
-		        <p class='well'>{{ $Isi -> content}}</p>
+		        <p class='well'>{{ $Isi -> content}}</p>		        
+		        @if (Auth::id() === $Isi->user_id)	
+		        	<a href='{{url("/editthread/$Isi->category_id/$Isi->post_id")}}' type="submit" button type="button" class="btn btn-info btn-xs pull-right">Edit Thread</a>
+		        @endif		        
 	        @endforeach()
+	       <br>
 	       <hr>
 	       <div id="comments">
 	       	  @foreach($IsiComment as $key=>$IsiC)

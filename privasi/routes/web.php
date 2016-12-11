@@ -56,11 +56,13 @@ Route::get('/forum/{category}', function($categoryid){
 	
 });
 
-Route::get('forum/content/{categoryid}/{post_id}', 'ThreadController@show');
+Route::get('forum/content/{categoryid}/{post_id}', ['as' => 'konten', 'uses' => 'ThreadController@show']);
 
 Route::get('/admin','FrontControl@admin');
 
 Route::post('/simpanthread','ThreadController@store');
+Route::get('/editthread/{categoryid}/{post_id}','ThreadController@edit');
+Route::resource('/simpaneditthread/{post_id}','ThreadController@update');
 Route::post('/simpancomment','CommentController@store');
 
 /*Route::get('blade', function () 
