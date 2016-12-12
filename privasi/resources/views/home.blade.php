@@ -1,6 +1,7 @@
 @extends('layout.layout')
 
 @section('content')
+
 <section>
     <div class="container">
       <!-- Main component for a primary marketing message or call to action -->

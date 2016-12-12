@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 use App\category;
 use App\subcategory;
+use App\RequestCom;
+use Auth;
 use App\Http\Controllers\Controller;
 use DB;
 
@@ -20,6 +23,8 @@ class FrontControl extends Controller
     var $title;
     var $description;
 
+    protected $allSubCategories;
+
 
     public function __construct()
     {
@@ -28,6 +33,18 @@ class FrontControl extends Controller
 
         //$this->comment = comment::all(array('comment', 'post_id'));
        // $this->post = post::all(array('title', 'content'));
+        $subcate=new subcategory;
+
+        try {
+
+            $this->allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        view::share('allSubCategories', $this->allSubCategories);
     }
 
     public function index()
@@ -37,19 +54,7 @@ class FrontControl extends Controller
             $categoryid = $list->cat_id;
             $this->subcategory = DB::select("select * from subcategory where cat_id = '$categoryid'");
         }*/
-
-        $subcate=new subcategory;
         
-        try {
-
-            $allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
-
 
     return view('home', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - Home', 'description' => '' , 'page' => 'home'));
 
@@ -57,20 +62,42 @@ class FrontControl extends Controller
 
     public function about()
     {
-    	return view('about', array('title' => 'Kumpul Komunitas - About', 'description' => '' , 'page' => 'about'));
+    	return view('about', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - About', 'description' => '' , 'page' => 'about'));
     }
 
     public function DaftarKomunitas()
     {
-    	return view('Request', array('title' => 'Kumpul Komunitas - Request', 'description' => '' , 'page' => 'request'));
+      if (Auth::guest())
+      {
+          return view('auth/login');
+      }
+      else
+      {
+          return view('Request', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - Request', 'description' => '' , 'page' => 'request'));
+      }
+
     }
 
-    public function contact() {
-        return view('contact', array('title' => 'Kumpul Komunitas - Contact', 'description' => '' , 'page' => 'contact'));
+    public function SimpanRequest(Request $request)
+    {
+        $RequestCom = new RequestCom();
+        $RequestCom->user_Id = $request->userid;
+        $RequestCom->namaKomunitas = $request->namaKomunitas;
+        $RequestCom->deskipsi = $request->deskipsi;             
+        $RequestCom->save();
+
+        \Session::flash('flash_message','Permintaan Berhasil Dibuat');
+        return redirect('/');
     }
 
-    public function calendar() {
-        return view('calender', array('title' => 'Kumpul Komunitas - Calendar', 'description' => '' , 'page' => 'calender'));
+    public function contact()
+    {
+        return view('contact', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - Contact', 'description' => '' , 'page' => 'contact'));
+    }
+
+    public function calendar() 
+    {
+        return view('calender', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - Calendar', 'description' => '' , 'page' => 'calender'));
     }
 
 

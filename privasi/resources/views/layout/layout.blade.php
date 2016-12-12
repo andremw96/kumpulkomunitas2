@@ -11,7 +11,7 @@
     <link rel="icon" href="../../favicon.ico">
 
     <!-- <title>{{ config('app.name', 'Kumpul Komunitas') }}</title> -->
-    <link rel="shortcut icon" href="img/logo.ico" />
+    <link rel="shortcut icon" href={{asset('img/logo.ico')}} />
     <title>Kumpul Komunitas</title>
 
     <!-- for calendar -->
@@ -55,6 +55,14 @@
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); ?>
+
+        $(document).ready(function () {
+          window.setTimeout(function() {
+              $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+                  $(this).remove(); 
+              });
+          }, 5000);       
+        });
     </script>
 
     <style type="text/css">
@@ -115,6 +123,14 @@
   </head>
 
   <body>
+  @if(Session::has('flash_message'))
+    <div class="row">
+      <div class="alert alert-success alert-dismissable fade in col-md-4 col-md-offset-4" align="center" id="success-alert">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em>
+      </div>
+    </div>
+  @endif
 
 <header class="page-row">
   <div class="menu">
@@ -135,36 +151,15 @@
               <li><a href="{{url('/about')}}">About</a></li>
               <li><a href="{{url('/contact')}}">Contact</a></li>
               <li class="dropdown">
-                <a href="#kategori" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kategori <span class="caret"></span></a>
+                <a href="/forum" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kategori <span class="caret"></span></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu" id="dropmenu">
-                  <li class="dropdown-header">General Discussion</li>
-                    <li><a href="#generalD">General Discussion</a></li>
-                    <li><a href="#lounge">The Lounge</a></li>
-                    <li><a href="##">FAQ</a></li>
-                  <li role="separator" class="divider"></li>
-
-                  <li class="dropdown-header">Kendaraan</li>
-                    <li class="dropdown-submenu">
-                      <a tabindex="-1" href="#">Kendaraan</a>
-                      <ul class="dropdown-menu">
-                        <li><a tabindex="-1" href="#roda2">Kendaraan Roda 2</a></li>
-                        <li><a href="#roda4">Kendaraan Roda 4</a></li>
-                        <li><a href="#sepeda">Sepeda</a></li>
-                      </ul>
-                    </li>
-                  <li role="separator" class="divider"></li>
-
-                  <li class="dropdown-header">Alat Elektronik</li>
-                    <li><a href="#">Komputer</a></li>
-                    <li><a href="#">TV</a></li>
-                    <li><a href="#">DVD Player</a></li>
-                  <li role="separator" class="divider"></li>
-
-                  <li class="dropdown-header">Hiburan</li>
-                    <li><a href="#">Game Komputer</a></li>
-                    <li><a href="#">Game Konsol</a></li>
-                    <li><a href="#">Musik</a></li>
-                  <li role="separator" class="divider"></li>
+                    @foreach ($allSubCategories as $subCate)
+                     <li class="dropdown-header"><a href='{{url("forum/$subCate->id")}}'>{{ $subCate->category }}</a></li>
+                        @foreach ($subCate->subCategory as $firstNestedSub)
+                            <li><a href='{{url("forum/$firstNestedSub->id")}}'>{{ $firstNestedSub->category }}</a></li>
+                        @endforeach()
+                        <li role="separator" class="divider"></li>
+                    @endforeach()                    
                 </ul>
               </li>
               <li><a href="{{url('/regcommunity')}}">Daftar Komunitas</a></li>
@@ -238,7 +233,7 @@
                   <div class="my-quest" id="quest">
                     <div>           
                         <hr>
-                        <form method="POST" action="{{ url('/simpanthread') }}">   
+                        <form method="POST" action="{{ route('thread.store') }}">   
                         {{csrf_field()}}                   
                             <label>Kategori</label>
                               <select name="category" class="form-control">

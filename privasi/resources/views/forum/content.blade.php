@@ -14,14 +14,13 @@
 	         @endforeach()
 	    </div> 
 	    
-
 	    <div class="panel-body">
 	    	@foreach($IsiThread as $Isi)   
 	       		<label>Posted By: {{ $Isi -> username}} </label>    	
 	       		<label>Date time posted : {{ $Isi -> created_at}} </label>		       		
 		        <p class='well'>{{ $Isi -> content}}</p>		        
 		        @if (Auth::id() === $Isi->user_id)	
-		        	<a href='{{url("/editthread/$Isi->category_id/$Isi->post_id")}}' type="submit" button type="button" class="btn btn-info btn-xs pull-right">Edit Thread</a>
+		        	<a href="{{ route('thread.edit', $Isi->post_id)}}" type="submit" button type="button" class="btn btn-info btn-xs pull-right">Edit Thread</a>
 		        @endif		        
 	        @endforeach()
 	       <br>
@@ -31,6 +30,10 @@
 	       		<label>Comment # {{++$key}} by : </label> {{ $IsiC -> username }} <br>
                 <h6 class="pull-right"> {{ $IsiC -> created_at }} </h6>
                 <p class='well'> {{ $IsiC -> comment }} </p>
+                
+	            @if (Auth::id() === $IsiC->user_id)	
+		        	<a href="{{ route('comment.edit', $IsiC->comment_id)}}" type="submit" button type="button" class="btn btn-info btn-xs pull-right">Edit Comment</a>
+		        @endif	 
               @endforeach()
 	       </div>
 	    </div>
@@ -46,7 +49,7 @@
 	     @else
 		    <div class="col-sm-5 col-md-5 sidebar">
 				 <h3>Komentar</h3>
-			      <form method="POST" action="{{ url('/simpancomment')}}">
+			      <form method="POST" action="{{ route('comment.store')}}">
 			      	{{csrf_field()}}  
 				        <textarea type="text" class="form-control" name="commenttxt" rows="5" required></textarea><br>
 				        @foreach($IsiThread as $Cari)

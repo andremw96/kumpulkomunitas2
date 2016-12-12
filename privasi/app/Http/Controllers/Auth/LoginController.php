@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\subcategory;
+use Illuminate\Support\Facades\View;
 
 class LoginController extends Controller
 {
@@ -28,6 +30,7 @@ class LoginController extends Controller
 
     protected $redirectTo = '/';    
     protected $username = 'username';
+    protected $allSubCategories;
 
     /**
      * Create a new controller instance.
@@ -37,5 +40,18 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+
+         $subcate=new subcategory;
+
+        try {
+
+            $this->allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        view::share('allSubCategories', $this->allSubCategories);
     }
 }

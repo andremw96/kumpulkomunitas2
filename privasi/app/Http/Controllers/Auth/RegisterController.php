@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\View;
 use App\User;
+use App\subcategory;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+
 
 class RegisterController extends Controller
 {
@@ -29,6 +32,8 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
     protected $username = 'username';
+    protected $allSubCategories;
+
 
     /**
      * Create a new controller instance.
@@ -38,6 +43,19 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+         $subcate=new subcategory;
+
+        try {
+
+            $this->allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        view::share('allSubCategories', $this->allSubCategories);
     }
 
     /**

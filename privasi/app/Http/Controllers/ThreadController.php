@@ -97,7 +97,8 @@ class ThreadController extends Controller
         $categoryid = $thread->category_id;
         $post_id = $thread->post_id;
         //return Redirect::to("forum/content");
-        return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
+        //return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
+         return redirect()->action('ThreadController@show', [$post_id]);
         //return Redirect::back()->with('message','Thread Tersimpan');;
     }
 
@@ -107,10 +108,13 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($categoryid, $post_id)
+    public function show($post_id)
     {
         $IsiThread = thread::where('post_id', '=', $post_id)->get();
         $IsiComment = comment::where('post_id', '=', $post_id)->get();
+
+        $thread = thread::findOrFail($post_id);
+        $categoryid = $thread->category_id;
         $CariKategori = category::where('id', '=', $categoryid)->get();
 
         return view("forum/content", compact('IsiThread', 'IsiComment', 'CariKategori'));
@@ -122,10 +126,12 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($categoryid, $post_id)
+    public function edit($post_id)
     {
         $IsiThread = thread::findOrFail($post_id); 
-        //$IsiThread = thread::where('post_id', '=', $post_id)->get();       
+        //$IsiThread = thread::where('post_id', '=', $post_id)->get(); 
+        $thread = thread::findOrFail($post_id);
+        $categoryid = $thread->category_id;      
         $CariKategori = category::where('id', '=', $categoryid)->get();
         return view("forum/editcontent", compact('IsiThread', 'CariKategori'));
     }
@@ -140,14 +146,17 @@ class ThreadController extends Controller
     public function update($post_id, Request $request)
     {
         $thread = thread::findOrFail($post_id);
-        $categoryid = $thread->category_id;
+        //$categoryid = $thread->category_id;
         $post_id = $thread->post_id;
+        $input = $request->all();
+        $thread->fill($input)->save();
         //$thread->content = $request->content;
-        $thread->update($request->all());
-       // $thread->save();
-      // return Redirect::to("forum/content");
-        return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
-
+        //$thread->content = Input::get('content');
+       // $thread->update($request->all());
+        //$thread->save();
+       //return Redirect::to("forum/content");    
+        return redirect()->action('ThreadController@show', [$post_id]);
+       // return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
     }
 
     /**

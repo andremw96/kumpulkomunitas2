@@ -4,6 +4,7 @@
 
 <section>
 	<div class="container">
+		<h3>Edit Thread</h3>		
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				 @foreach($CariKategori as $CariK)
@@ -14,7 +15,9 @@
 		    </div> 
 
 		    <div class="panel-body">   
-		    	<form method="patch" action='{{ url("simpaneditthread/$IsiThread->post_id")}}'>		    		
+		    	<form method="POST" action="{{ route('thread.update', $IsiThread->post_id)}}">	
+		    		{!! csrf_field() !!}
+     				<input type="hidden" name="_method" value="PUT">	    		
 					<textarea class="form-control" name="content" rows="10" required> {{ $IsiThread -> content }} </textarea><br>
 					<input type="submit" id="save" class="btn btn-success pull-right" value="Edit Thread">					
 		    	</form>		        

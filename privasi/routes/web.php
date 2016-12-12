@@ -24,6 +24,7 @@
 Route::get('/','FrontControl@index');
 Route::get('/about','FrontControl@about');
 Route::get('/regcommunity','FrontControl@DaftarKomunitas');
+Route::post('/simpanrequest','FrontControl@SimpanRequest');
 Route::get('/contact','FrontControl@contact');
 Route::get('/calendar','FrontControl@calendar');
 //Route::get('/login','FrontControl@login');
@@ -56,14 +57,21 @@ Route::get('/forum/{category}', function($categoryid){
 	
 });
 
-Route::get('forum/content/{categoryid}/{post_id}', ['as' => 'konten', 'uses' => 'ThreadController@show']);
+//Route::get('forum/content/{categoryid}/{post_id}', ['as' => 'konten', 'uses' => 'ThreadController@show']);
 
 Route::get('/admin','FrontControl@admin');
 
-Route::post('/simpanthread','ThreadController@store');
-Route::get('/editthread/{categoryid}/{post_id}','ThreadController@edit');
-Route::resource('/simpaneditthread/{post_id}','ThreadController@update');
-Route::post('/simpancomment','CommentController@store');
+//Route::post('/simpanthread','ThreadController@store');
+//Route::get('/editthread/{categoryid}/{post_id}','ThreadController@edit');
+//Route::resource('/simpaneditthread/{post_id}', 'ThreadController@update');
+
+Route::resource('thread', 'ThreadController');
+Route::resource('comment', 'CommentController');
+
+//Route::post('/simpancomment','CommentController@store');
+//Route::get('/editcomment/{categoryid}/{post_id}/{comment_id}', 'CommentController@edit');
+//Route::patch('/simpaneditcomment/{postid}/{commentid}', 'CommentController@update');
+
 
 /*Route::get('blade', function () 
 {

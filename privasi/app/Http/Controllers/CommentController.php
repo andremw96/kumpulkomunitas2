@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\comment;
+use App\thread;
+use App\category;
 use Redirect;
 
 class CommentController extends Controller
@@ -64,9 +66,15 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($comment_id)
     {
-        //
+        $IsiComment = comment::findOrFail($comment_id); 
+        $post_id = comment::findOrFail($comment_id)->post_id;
+        $categoryid = thread::findOrFail($post_id)->category_id;
+
+        $IsiThread = thread::where('post_id', '=', $post_id)->get();       
+        $CariKategori = category::where('id', '=', $categoryid)->get();
+        return view("forum/editcomment", compact('IsiComment', 'IsiThread', 'CariKategori'));
     }
 
     /**
@@ -76,9 +84,16 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($comment_id, Request $request)
     {
-        //
+        $Comment = comment::findOrFail($comment_id); 
+        $input = $request->all();
+        $Comment->fill($input)->save();
+        //$Comment->update($request->all());
+        //$categoryid = thread::findOrFail($post_id)->category_id;
+        $post_id = $Comment->post_id;
+
+        return redirect()->action('ThreadController@show', [$post_id]);
     }
 
     /**

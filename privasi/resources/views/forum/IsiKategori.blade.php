@@ -41,7 +41,7 @@
 				  <tbody>
 					@foreach($GenDisc as $GenDiscus)
 						<tr>
-							<td><h4><a href='{{ url("forum/content/$Kategori->id/$GenDiscus->post_id" )}}'>{{ $GenDiscus->title }}</a></h4></td>
+							<td><h4><a href='{{ route("thread.show", $GenDiscus->post_id )}}'>{{ $GenDiscus->title }}</a></h4></td>
 							<td><h4>{{ $GenDiscus->username }}</h4></td>
 							<td><h4>{{ $GenDiscus->created_at }}</h4></td>
 							<td><h4>{{ $GenDiscus->updated_at }}</h4></td>
