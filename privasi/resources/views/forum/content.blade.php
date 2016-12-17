@@ -1,6 +1,24 @@
 @extends('layout.layout')
 
+@foreach($IsiThread as $JudulThread)
+	@section('title', $JudulThread->title)
+@endforeach()
+
 @section('content')
+<div class="container">
+	<div clss="col-lg-12">
+		<ol class="breadcrumb">
+			<li>You are here: <a href="{{ url('/') }}">Home</a></li>
+			@foreach($CariKategori as $CariK)
+				<li><a href='{{url("forum/$CariK->id")}}'>{{ $CariK->category }}</a></li>
+			@endforeach()
+
+			@foreach($IsiThread as $JudulThread)
+	         	<li class="active">{{ $JudulThread->title }}</li>	
+	        @endforeach()
+		</ol>
+	</div>
+</div>	
 
 <div class="container">
 	<div class="panel panel-success">
@@ -9,31 +27,64 @@
 			 	<label>Topic Category : <a href='{{url("forum/$CariK->id")}}'> {{ $CariK->category }} </a></label>
 			 @endforeach()
 
-			 @foreach($IsiThread as $JudulThread)
-	         	<h3 class="panel-title">Judul Thread : {{ $JudulThread->title }} </h3>
+			 @foreach($IsiThread as $JudulThread)	         
+	         	@if (Auth::guest())		
+			
+				@elseif (Auth::id() === $JudulThread->user_id)				
+				   <a href="{{ url('events/create') }}" type="submit" button type="button" class="btn btn-primary btn-xs pull-right">Buat Agenda Pertemuan</a>
+				@endif
+				<h3 class="panel-title">Judul Thread : {{ $JudulThread->title }} </h3>
 	         @endforeach()
 	    </div> 
 	    
 	    <div class="panel-body">
 	    	@foreach($IsiThread as $Isi)   
 	       		<label>Posted By: {{ $Isi -> username}} </label>    	
-	       		<label>Date time posted : {{ $Isi -> created_at}} </label>		       		
+	       		<label>Date time posted : {{ $Isi -> updated_at}} </label>		       		
 		        <p class='well'>{{ $Isi -> content}}</p>		        
-		        @if (Auth::id() === $Isi->user_id)	
+		        @if (Auth::guest())
+
+		        @elseif ((Auth::id() === $Isi->user_id)	or (Auth::user()->HakAkses === 'Admin'))
 		        	<a href="{{ route('thread.edit', $Isi->post_id)}}" type="submit" button type="button" class="btn btn-info btn-xs pull-right">Edit Thread</a>
-		        @endif		        
+		        @else
+
+		        @endif		
+
+		        @if (Auth::guest())
+
+		        @elseif (Auth::user()->HakAkses === 'Admin')
+		        	<form method="POST" action="{{ route('thread.destroy', $Isi->post_id)}}" accept-charset="UTF-8">	
+		        	{{csrf_field()}}
+		        		<input name="_method" type="hidden" value="DELETE">		        		
+		        		<input onclick="return confirm('Anda yakin akan menghapus thread ?');" type="submit" button type="button" class="btn btn-danger btn-xs pull-right" value="Delete Thread" />
+		        	</form>
+		        @else
+
+		        @endif        
 	        @endforeach()
 	       <br>
 	       <hr>
 	       <div id="comments">
 	       	  @foreach($IsiComment as $key=>$IsiC)
 	       		<label>Comment # {{++$key}} by : </label> {{ $IsiC -> username }} <br>
-                <h6 class="pull-right"> {{ $IsiC -> created_at }} </h6>
+                <h6 class="pull-right"> {{ $IsiC -> updated_at }} </h6>
                 <p class='well'> {{ $IsiC -> comment }} </p>
                 
-	            @if (Auth::id() === $IsiC->user_id)	
+	            @if (Auth::guest())
+
+		        @elseif ((Auth::id() === $IsiC->user_id) or (Auth::user()->HakAkses === 'Admin'))	
 		        	<a href="{{ route('comment.edit', $IsiC->comment_id)}}" type="submit" button type="button" class="btn btn-info btn-xs pull-right">Edit Comment</a>
 		        @endif	 
+
+		        @if (Auth::guest())
+
+		        @elseif (Auth::user()->HakAkses === 'Admin')
+		        	<form method="POST" action="{{ route('comment.destroy', $IsiC->comment_id)}}" accept-charset="UTF-8">	
+		        	{{csrf_field()}}	
+		        		<input name="_method" type="hidden" value="DELETE">		        		
+		        		<input onclick="return confirm('Anda yakin akan menghapus Comment ?');" type="submit" button type="button" class="btn btn-danger btn-xs pull-right" value="Delete Comment" />
+		        	</form>
+		        @endif   
               @endforeach()
 	       </div>
 	    </div>

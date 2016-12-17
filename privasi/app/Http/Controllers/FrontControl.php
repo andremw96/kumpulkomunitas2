@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 use App\category;
 use App\subcategory;
 use App\RequestCom;
+use App\thread;
 use Auth;
 use App\Http\Controllers\Controller;
 use DB;
@@ -54,9 +55,27 @@ class FrontControl extends Controller
             $categoryid = $list->cat_id;
             $this->subcategory = DB::select("select * from subcategory where cat_id = '$categoryid'");
         }*/
-        
+        $subcate=new subcategory;
 
-    return view('home', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - Home', 'description' => '' , 'page' => 'home'));
+        try {
+
+            $allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        //view::share('allSubCategories', $allSubCategories);
+        
+    //$IsiThread = thread::where('category_id', '=', $allSubCategories)->get();
+     /*   $JmlhPost = DB::table('tblpost')
+                 ->select('post_id', DB::raw('count(*) as total'))
+                 ->groupBy('browser')
+                 ->get();*/
+       // $JmlhPost = thread::groupBy('category_id')->get()->count();
+
+    return view('home', compact("allSubCategories"), array('title' => 'Kumpul Komunitas - Home', 'description' => '' , 'page' => 'home'));
 
     }
 
@@ -97,8 +116,33 @@ class FrontControl extends Controller
 
     public function calendar() 
     {
-        return view('calender', compact('allSubCategories'), array('title' => 'Kumpul Komunitas - Calendar', 'description' => '' , 'page' => 'calender'));
+      $events = [];
+
+      $events[] = \Calendar::event(
+          'Event One', //event title
+          false, //full day event?
+          '2015-02-11T0800', //start time (you can also use Carbon instead of DateTime)
+          '2015-02-12T0800', //end time (you can also use Carbon instead of DateTime)
+          0 //optionally, you can specify an event ID
+      );
+
+      $events[] = \Calendar::event(
+          "Valentine's Day", //event title
+          true, //full day event?
+          new \DateTime('2015-02-14'), //start time (you can also use Carbon instead of DateTime)
+          new \DateTime('2015-02-14'), //end time (you can also use Carbon instead of DateTime)
+          'stringEventId' //optionally, you can specify an event ID
+      );
+
+      $eloquentEvent = EventModel::first(); //EventModel implements MaddHatter\LaravelFullcalendar\Event
+
+      $calendar = \Calendar::addEvents($events); //add an array with addEvents
+
+
+        return view("calender", compact('calendar', 'allSubCategories'));
     }
+
+
 
 
    /* public function login() {
@@ -114,6 +158,6 @@ class FrontControl extends Controller
     }*/
 
     public function admin() {
-        return view('dashboard');
+        return view('admin/dashboard');
     }
 }

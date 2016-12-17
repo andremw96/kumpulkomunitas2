@@ -12,16 +12,13 @@
 
     <!-- <title>{{ config('app.name', 'Kumpul Komunitas') }}</title> -->
     <link rel="shortcut icon" href={{asset('img/logo.ico')}} />
-    <title>Kumpul Komunitas</title>
+    <title>@yield('title') | Kumpul Komunitas</title>
 
     <!-- for calendar -->
-    <link href={{asset('assets/css/fullcalendar.css')}} rel='stylesheet' />
-    <link href={{asset('assets/css/fullcalendar.print.css')}} rel='stylesheet' media='print' />
-    <script src={{asset('assets/js/moment.min.js')}}></script>
-    <script src={{asset('assets/js/jquery.min.js')}}></script>
-    <script src={{asset('assets/js/jquery-ui.min.js')}}></script>
-    <script src={{asset('assets/js/fullcalendar.min.js')}}></script>
-    
+    <link href={{asset('assets/css/fullcalendar.min.css')}} rel='stylesheet' />
+    <link href="{{ url('assets/css') }}/daterangepicker.css" rel="stylesheet">
+
+  
     <!-- Bootstrap core CSS -->
     <!-- <link href="{{asset('css/styles.css')}}" rel="stylesheet" type="text/css"> -->
     <link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
@@ -29,7 +26,6 @@
     <link href="{{asset('dist/css/dropdown-submenu.css')}}" rel="stylesheet" type="text/css" >
     <link href="{{asset('css/footer.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('css/login.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('dist/css/datepicker.css')}}" rel="stylesheet" type="text/css">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="{{asset('assets/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet" type="text/css">
@@ -49,21 +45,6 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]--> 
-
-    <!-- Scripts -->
-    <script>
-        window.Laravel = <?php echo json_encode([
-            'csrfToken' => csrf_token(),
-        ]); ?>
-
-        $(document).ready(function () {
-          window.setTimeout(function() {
-              $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
-                  $(this).remove(); 
-              });
-          }, 5000);       
-        });
-    </script>
 
     <style type="text/css">
       #login-dp{
@@ -205,7 +186,7 @@
                             </li>
                            </ul>
                         </li>
-              @else 
+              @else                 
                   <ul class="nav navbar-nav navbar-left">
                       <li><a href="#quest"> Buat Thread</a></li>
                   </ul>           
@@ -324,17 +305,36 @@
         </div>
     </footer><!--/Footer--> 
   
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{asset('assets/js/ie10-viewport-bug-workaround.js')}}"></script>
     <script src="{{asset('dist/js/header.js')}}"></script>
-    <script src="{{asset('dist/js/bootstrap-datepicker.js')}}"></script>
+    <script src={{asset('assets/js/jquery-ui.min.js')}}></script>
+    <!-- <script src="{{ url('assets/js') }}/moment.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+
+
+    <!-- Scripts -->
+    <script>
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
+
+        $(document).ready(function () {
+          window.setTimeout(function() {
+              $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+                  $(this).remove(); 
+              });
+          }, 5000);       
+        });
+    </script>
+
+    @yield('js')
   </body>
 </html>
 

@@ -10,6 +10,8 @@ use App\category;
 //use Input;
 //use DB;
 use Redirect;
+use Illuminate\Support\Facades\View;
+use Auth;
 
 class ThreadController extends Controller
 {
@@ -43,6 +45,26 @@ class ThreadController extends Controller
 
         return view('forum/TheLounge', compact('forumthread'));
     }*/
+    public function __construct()
+    {
+        //$this->category = category::all(array('category'));
+       // $this->subcategory = subcategory::all(array('subcategory'));
+
+        //$this->comment = comment::all(array('comment', 'post_id'));
+       // $this->post = post::all(array('title', 'content'));
+        $subcate=new subcategory;
+
+        try {
+
+            $this->allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        view::share('allSubCategories', $this->allSubCategories);
+    }
 
 
     /**
@@ -52,18 +74,6 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        //$DaftarKategori = category::all();
-        $subcate=new subcategory;
-        
-        try {
-
-            $allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
         return view("/forum/DaftarKategori", compact('allSubCategories'));
     }
 
@@ -148,12 +158,13 @@ class ThreadController extends Controller
         $thread = thread::findOrFail($post_id);
         //$categoryid = $thread->category_id;
         $post_id = $thread->post_id;
-        $input = $request->all();
-        $thread->fill($input)->save();
-        //$thread->content = $request->content;
+        //$input = $request->all();
+        //$thread->fill($input)->save();
+        $thread->content = $request->content;
+        $thread->updated_by = $request->updated_by;
         //$thread->content = Input::get('content');
        // $thread->update($request->all());
-        //$thread->save();
+        $thread->save();
        //return Redirect::to("forum/content");    
         return redirect()->action('ThreadController@show', [$post_id]);
        // return Redirect()->route('konten', ['categoryid'=>$categoryid, 'post_id'=>$post_id]);
@@ -165,8 +176,14 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($post_id)
     {
-        //
+        $thread = thread::findOrFail($post_id);
+        $category_id = $thread->category_id;
+        $thread->delete();
+
+        // redirect
+        \Session::flash('flash_message', 'Thread sudah terhapuss..!!');
+        return redirect('/');
     }
 }

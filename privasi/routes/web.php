@@ -26,7 +26,7 @@ Route::get('/about','FrontControl@about');
 Route::get('/regcommunity','FrontControl@DaftarKomunitas');
 Route::post('/simpanrequest','FrontControl@SimpanRequest');
 Route::get('/contact','FrontControl@contact');
-Route::get('/calendar','FrontControl@calendar');
+//Route::get('/calendar','FrontControl@calendar');
 //Route::get('/login','FrontControl@login');
 //Route::get('/signup','FrontControl@signup');
 //Route::get('/logout','FrontControl@logout');
@@ -35,7 +35,7 @@ Route::get('/calendar','FrontControl@calendar');
 Route::get('/forum','ThreadController@index');
 
 Route::get('/forum/{category}', function($categoryid){
-	$GenDisc = App\thread::where('category_id', '=', $categoryid)->get();
+	$GenDisc = App\thread::where('category_id', '=', $categoryid)->Paginate(20);
 
 	$namaKategori = App\category::where('id', '=', $categoryid)->get();
 
@@ -57,16 +57,141 @@ Route::get('/forum/{category}', function($categoryid){
 	
 });
 
+Route::resource('thread', 'ThreadController');
+Route::resource('comment', 'CommentController');
+Route::get('/calendar', 'EventController@lihatCalendar');
+
+Route::resource('events', 'EventController');
+Route::get('/api', function () {
+	$events = DB::table('events')->select('id', 'komunitas', 'title', 'start_time as start', 'end_time as end')->get();
+	foreach($events as $event)
+	{
+		$event->title = $event->komunitas . ' - ' .$event->title;
+		$event->url = url('events/' . $event->id);
+	}
+	return $events;
+});
+
+/*Route::Auth();
+Route::get('/admin', 'AdminController@index');
+Route::get('/admin/login', 'AuthAdmin\LoginController@showLoginForm');
+Route::post('/admin/login', 'AuthAdmin\LoginController@login');
+Route::get('/admin/logout', 'AuthAdmin\LoginController@logout');
+
+Route::get('/admin/register', 'AuthAdmin\RegisterController@showRegisterForm');
+Route::post('/admin/register', 'AuthAdmin\RegisterController@register');*/
+
+// Admin Area
+/*Route::get('/admin', function(){
+	if (Auth::guest())  
+	{
+		return view('/admin/login');
+	}
+	elseif (Auth::user()->HakAkses == 'User')
+	{
+		return redirect()->action('FrontControl@index');
+	}
+	else
+	{
+		return view('admin/dashboard');	
+	}
+});*/
+
+Route::get('/admin', ['middleware' => ['auth', 'admin'], function() {
+    // this page requires that you be logged in AND be an Admin
+    return view( '/admin/dashboard' );
+}]);
+
+Route::get('/admin/kategori/DaftarKategori', 'CategoryController@index')->middleware('auth', 'admin');
+
+Route::group(['middleware' => ['auth', 'admin']], function() {
+	Route::resource('/admin/kategori', 'CategoryController');	
+});
+
+
+/*Route::get('/admin/lihatDaftar/DaftarKategori', ['middleware' => ['auth', 'admin'], function() {
+    // this page requires that you be logged in AND be an Admin
+    $subcate=new App\subcategory;
+
+    try {
+
+        $allSubCategories=$subcate->getCategories();
+        
+    } catch (Exception $e) {
+        
+        //no parent category found
+    }
+
+   return view("/admin/lihatDaftar/DaftarKategori", compact('allSubCategories'));
+}]);*/
+
+Route::get('/admin/lihatDaftar/DaftarThread', ['middleware' => ['auth', 'admin'], function() {
+    // this page requires that you be logged in AND be an Admin
+    return view( '/admin/lihatDaftar/DaftarThread' );
+}]);
+
+Route::get('/admin/lihatDaftar/DaftarUser', ['middleware' => ['auth', 'admin'], function() {
+    // this page requires that you be logged in AND be an Admin
+    return view( '/admin/lihatDaftar/DaftarUser' );
+}]);
+
+Route::get('protected', ['middleware' => ['auth'], function() {
+    // this page requires that you be logged inbut you don't need to be an admin
+    return redirect()->action('FrontControl@index');
+}]);
+
+
 //Route::get('forum/content/{categoryid}/{post_id}', ['as' => 'konten', 'uses' => 'ThreadController@show']);
 
-Route::get('/admin','FrontControl@admin');
+/*Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
+	Route::get('/','FrontControl@admin');
+
+	Route::resource('categories', 'dataEntry\categoriesController');
+
+	Route::resource('listRequest', 'transaksi\listRequestController');
+});*/
+
+/*Route::group(['Middleware' => 'web'], function(){
+	Route::Auth();	
+});
+
+Route::group(['Middleware' => ['web','Auth']], function()
+{	
+	Route::get('/','FrontControl@index');
+	Route::get('/', function(){
+		if ((Auth::guest()) or (Auth::user()->HakAkses == 'User') )
+		{
+			$subcate=new App\subcategory;
+
+	        try {
+
+	            $allSubCategories=$subcate->getCategories();
+	            
+	        } catch (Exception $e) {
+	            
+	            //no parent category found
+	        }
+
+			return view('home', compact("allSubCategories"), array('title' => 'Kumpul Komunitas - Home', 'description' => '' , 'page' => 'home'));
+	
+		}
+		elseif (Auth::user()->HakAkses == 'Admin') 
+		{
+
+			return view('admin/dashboard');	
+		}
+	});
+});	
+
+Route::get('admin', ['Middleware' => ['web', 'Auth', 'admin'], function(){
+	return view('admin/dashboard');
+}]);*/
+
 
 //Route::post('/simpanthread','ThreadController@store');
 //Route::get('/editthread/{categoryid}/{post_id}','ThreadController@edit');
 //Route::resource('/simpaneditthread/{post_id}', 'ThreadController@update');
 
-Route::resource('thread', 'ThreadController');
-Route::resource('comment', 'CommentController');
 
 //Route::post('/simpancomment','CommentController@store');
 //Route::get('/editcomment/{categoryid}/{post_id}/{comment_id}', 'CommentController@edit');

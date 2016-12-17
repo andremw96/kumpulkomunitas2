@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\subcategory;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -28,7 +29,8 @@ class LoginController extends Controller
      * @var string
      */
 
-    protected $redirectTo = '/';    
+    protected $redirectTo = '/';
+
     protected $username = 'username';
     protected $allSubCategories;
 
@@ -54,4 +56,5 @@ class LoginController extends Controller
 
         view::share('allSubCategories', $this->allSubCategories);
     }
+
 }

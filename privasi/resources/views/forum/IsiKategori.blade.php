@@ -1,26 +1,24 @@
 @extends('layout.layout')
 
+@foreach($namaKategori as $Kategori)	
+	@section('title', $Kategori->category)
+@endforeach
 @section('content')
+
+<div class="container">
+	<div clss="col-lg-12">
+		<ol class="breadcrumb">
+			<li>You are here: <a href="{{ url('/') }}">Home</a></li>
+			@foreach($namaKategori as $Kategori)
+	         	<li class="active">{{ $Kategori->category }}</li>	
+	        @endforeach()
+		</ol>
+	</div>
+</div>	
 
 <section>
 	<div class="container">
-		<table class="table">
-		@foreach ($allSubCategories as $subCate)
-		  <thead>
-			<tr>
-				<th><a href='{{url("forum/$subCate->id")}}'>{{ $subCate->category }}</a></th>
-			</tr>
-		  </thead>			
-		  <tbody>
-		  	<tr>
-		  		@foreach ($subCate->subCategory as $firstNestedSub)
-		  			<td><a href='{{url("forum/$firstNestedSub->id")}}'>{{ $firstNestedSub->category }}</a></td>
-		  		@endforeach()
-		  	</tr>
-		  </tbody>
-		@endforeach()
-		</table>	
-
+{!! $GenDisc->render() !!}
 		<div class="panel panel-success">
 			<div class="panel-heading">
 			  @foreach($namaKategori as $Kategori)	
@@ -39,7 +37,7 @@
 					</tr>
 				  </thead>
 				  <tbody>
-					@foreach($GenDisc as $GenDiscus)
+					@foreach($GenDisc as $GenDiscus)					
 						<tr>
 							<td><h4><a href='{{ route("thread.show", $GenDiscus->post_id )}}'>{{ $GenDiscus->title }}</a></h4></td>
 							<td><h4>{{ $GenDiscus->username }}</h4></td>

@@ -20,6 +20,9 @@ class CreateCategoryTable extends Migration
                 $table->string('description');
                 $table->integer('parent_id');
                 $table->timestamps();
+                $table->integer('user_id');
+                $table->softDeletes();
+                $table->integer('updated_by');
             });
 
         /*$faker = Faker\Factory::create();

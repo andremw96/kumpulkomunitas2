@@ -6,10 +6,27 @@ use Illuminate\Http\Request;
 use App\comment;
 use App\thread;
 use App\category;
+use App\subcategory;
 use Redirect;
+use Illuminate\Support\Facades\View;
 
 class CommentController extends Controller
 {
+    public function __construct()
+    {
+        $subcate=new subcategory;
+
+        try {
+
+            $this->allSubCategories=$subcate->getCategories();
+            
+        } catch (Exception $e) {
+            
+            //no parent category found
+        }
+
+        view::share('allSubCategories', $this->allSubCategories);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -87,8 +104,11 @@ class CommentController extends Controller
     public function update($comment_id, Request $request)
     {
         $Comment = comment::findOrFail($comment_id); 
-        $input = $request->all();
-        $Comment->fill($input)->save();
+        //$input = $request->all();
+        //$Comment->fill($input)->save();
+        $Comment->comment = $request->comment;
+        $Comment->updated_by = $request->updated_by;
+        $Comment->save();
         //$Comment->update($request->all());
         //$categoryid = thread::findOrFail($post_id)->category_id;
         $post_id = $Comment->post_id;
@@ -102,8 +122,14 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($comment_id)
     {
-        //
+        $Comment = comment::findOrFail($comment_id);  
+        $post_id = $Comment->post_id;
+        $Comment->delete();
+
+        // redirect
+        \Session::flash('flash_message', 'Comment sudah terhapuss..!!');
+        return redirect()->action('ThreadController@show', [$post_id]);
     }
 }

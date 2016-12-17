@@ -1,5 +1,6 @@
 @extends('layout.layout')
 
+@section('title', 'Contact')
 @section('content')
   <div class="container-fluid bg-1 text-center">
     <h3 class="margin">Who Am I?</h3>

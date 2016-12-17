@@ -1,5 +1,6 @@
 @extends('layout.layout')
 
+@section('title', 'Request Komunitas')
 @section('content')
 
     <div class="container">

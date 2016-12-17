@@ -1,5 +1,6 @@
 @extends('layout.layout')
 
+@section('title', 'Login')
 @section('content')
 <br>
 <div class="container">

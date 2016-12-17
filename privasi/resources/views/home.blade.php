@@ -1,5 +1,6 @@
 @extends('layout.layout')
 
+@section('title', 'Home')
 @section('content')
 
 <section>
@@ -78,10 +79,12 @@
           <tbody>
           @foreach ($subCate->subCategory as $firstNestedSub)
               <tr>
-                <td><h5><a href='{{url("forum/$firstNestedSub->id")}}'>{{ $firstNestedSub->category }} </a></h5></td>
-                <td class="text-center hidden-xs hidden-sm">9542</td>
-                <td class="text-center hidden-xs hidden-sm">8997</td>
-                <td class="hidden-xs hidden-sm">by <a href="#">John Doe</a></td>
+                <td>
+                <h4><a href='{{url("forum/$firstNestedSub->id")}}'>{{ $firstNestedSub->category }} </a><br><small>{{ $firstNestedSub->description }}</small></h4>
+                </td>
+                <td class="text-center hidden-xs hidden-sm"> - </td>
+                <td class="text-center hidden-xs hidden-sm"> - </td>
+                <td class="hidden-xs hidden-sm">by <a href="#"> - </a></td>
               </tr>
           </tbody>
           @endforeach()
