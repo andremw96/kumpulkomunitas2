@@ -103,9 +103,16 @@ Route::get('/admin', ['middleware' => ['auth', 'admin'], function() {
 }]);
 
 Route::get('/admin/kategori/DaftarKategori', 'CategoryController@index')->middleware('auth', 'admin');
+Route::get('/admin/account/DaftarAccount', 'AccountController@index')->middleware('auth', 'admin');
+Route::get('/admin/request/DaftarRequest', 'RequestController@index')->middleware('auth', 'admin');
+Route::get('/admin/adminthread/DaftarThread', 'AdminThreadController@index')->middleware('auth', 'admin');
+Route::get('/admin/request/create/{id}', 'RequestController@create')->middleware('auth', 'admin');
 
 Route::group(['middleware' => ['auth', 'admin']], function() {
 	Route::resource('/admin/kategori', 'CategoryController');	
+	Route::resource('/admin/account', 'AccountController');
+	Route::resource('/admin/request', 'RequestController', ['except' => 'create']);
+	Route::resource('/admin/adminthread', 'AdminThreadController');
 });
 
 

@@ -9,14 +9,14 @@
 	    <small>Control panel</small>
 	  </h1>
 	  <ol class="breadcrumb">
-	    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-	    <li class="active">Dashboard</li>
+	    <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+	    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
 	    <li><a href="{{ url('/admin/kategori/DaftarKategori') }}">Daftar Kategori</a></li>
 	    <li class="active">Edit Kategori</li>
 	  </ol> 
 </section>
 
-<section>
+<section class="content">
 		@if($errors)
 			@foreach($errors->all() as $error)
 			<p>{{ $error }}</p>

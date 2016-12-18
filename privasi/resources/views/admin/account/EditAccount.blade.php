@@ -1,7 +1,22 @@
-@extends('layout.layout')
+@extends('admin.layout')
 
-@section('title', 'Daftar Baru')
+@section('title', 'Admin Dashboard | Edit Account')
+
 @section('content')
+<section class="content-header">
+  <h1>
+    Dashboard
+    <small>Control panel</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+    <li><a href="{{ url('/admin/account/DaftarAccount') }}">Daftar Account</a></li>
+    <li class="active">Edit Account</li>
+  </ol> 
+</section>
+
+<section class="content">
 <br>
 <div class="container">
     <div class="row">
@@ -9,16 +24,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/admin/account/' . $IsiAccount->id) }}">
                         {{ csrf_field() }}
-
+                        <input type="hidden" name="_method" value="PUT" />
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Name</label>
 
                             <div class="col-md-6">
                                 <div class="input-group">  
                                         <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama" required autofocus>
+                                        <input id="name" type="text" class="form-control" name="name" value="{{ $IsiAccount->name }}" placeholder="Masukkan Nama" required autofocus>
 
                                         @if ($errors->has('name'))
                                             <span class="help-block">
@@ -35,7 +50,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Masukkan Email"  required>
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ $IsiAccount->email }}" placeholder="Masukkan Email"  required>
 
                                     @if ($errors->has('email'))
                                         <span class="help-block">
@@ -52,7 +67,7 @@
                             <div class="col-md-6"> 
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                                    <input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" placeholder="Masukkan Username" required>
+                                    <input id="username" type="text" class="form-control" name="username" value="{{ $IsiAccount->username }}" placeholder="Masukkan Username" disabled>
 
                                     @if ($errors->has('username'))
                                         <span class="help-block">
@@ -69,7 +84,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-venus-mars" aria-hidden="true"></i></span>
-                                    <select name="gender" class="form-control">      
+                                    <select name="gender" class="form-control" value="{{$IsiAccount->gender}}">      
                                         <option>Jenis Kelamin</option>                  
                                         <option value="Laki - Laki">Laki - Laki</option>
                                         <option value="Perempuan">Perempuan</option>
@@ -84,45 +99,19 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-birthday-cake" aria-hidden="true"></i></span>
-                                    <input type="date" class="form-control" name="TglLahir" id="TglLahir" placeholder="Masukkan Tanggal Lahir" required>
+                                    <input type="date" class="form-control" name="TglLahir" id="TglLahir" placeholder="Masukkan Tanggal Lahir" 
+                                    value="{{$IsiAccount->TglLahir}}" required>
                                 </div>
                             </div>
                         </div>                                             
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                                    <input id="password" type="password" class="form-control" name="password" placeholder="Masukkan Password" required>
-
-                                    @if ($errors->has('password'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('password') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Masukkan Konfirmasi Password" required>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="form-group{{ $errors->has('HakAkses') ? ' has-error' : '' }}">
                             <label for="HakAkses" class="col-md-4 control-label">Hak Akses</label>
                             <div class="col-md-6">
                                 <div class="input-group">                                    
-                                    <select name="HakAkses" class="form-control">                                                         
-                                        <option value="User">User</option>                                                                             
+                                    <select name="HakAkses" class="form-control" value="{{$IsiAccount->HakAkses}}">                                                         
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>                                        
                                     </select>
                                 </div>
                             </div>
@@ -131,18 +120,17 @@
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Register
+                                    Edit
                                 </button>
                             </div>
                         </div> 
 
                     </form>
-                        <div class="login-register">
-                            <p>Sudah punya akun? <a href="{{url('login')}}">Login Disini...</a></p>
-                        </div> 
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
+</section>
+
+@endsection()

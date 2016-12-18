@@ -10,13 +10,13 @@
     <small>Control panel</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li class="active">Dashboard</li>
+    <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
     <li class="active">Daftar Kategori</li>
   </ol> 
 </section>
 
-<section>
+<section class="content">
   <div>
   <a href="{{ url('/admin/kategori/create') }}" type="submit" button type="button" class="btn btn-primary pull-right">Add new Category</a>
       <table class="table">
@@ -32,7 +32,7 @@
           <tbody>
           @foreach ($category as $firstNestedSub)
               <tr>
-                <td><h5><a href='{{url("forum/$firstNestedSub->id")}}'>{{ $firstNestedSub->category }} </a></h5></td>
+                <td><h5><a href='{{url("forum/$firstNestedSub->id")}}' target="_blank">{{ $firstNestedSub->category }} </a></h5></td>
                 <td> {{ $firstNestedSub->JmlhPost }} </td>
                 <td> {{ $firstNestedSub->JmlhComment }} </td>
                 <td> {{ $firstNestedSub->LastPost }} </td>
@@ -49,7 +49,7 @@
           </tbody>
           @endforeach()   
       </table>
-    {!! $category->render() !!}     
+    {{ $category->links() }}    
    </div>
 </section>
 

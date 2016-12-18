@@ -27,6 +27,7 @@ class CreateTblpostTable extends Migration
                 $table->string('updated_at_ip');
                 $table->softDeletes();
                 $table->integer('deleted_by');
+                $table->integer('request_id');
             }); 
     }
 

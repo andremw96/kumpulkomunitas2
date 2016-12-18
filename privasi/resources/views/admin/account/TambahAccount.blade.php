@@ -1,7 +1,22 @@
-@extends('layout.layout')
+@extends('admin.layout')
 
-@section('title', 'Daftar Baru')
+@section('title', 'Admin Dashboard | Tambah Account')
+
 @section('content')
+<section class="content-header">
+  <h1>
+    Dashboard
+    <small>Control panel</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+    <li><a href="{{ url('/admin/account/DaftarAccount') }}">Daftar Account</a></li>
+    <li class="active">Tambah Account</li>
+  </ol> 
+</section>
+
+<section class="content">
 <br>
 <div class="container">
     <div class="row">
@@ -9,7 +24,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/admin/account/') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -122,7 +137,8 @@
                             <div class="col-md-6">
                                 <div class="input-group">                                    
                                     <select name="HakAkses" class="form-control">                                                         
-                                        <option value="User">User</option>                                                                             
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>                                        
                                     </select>
                                 </div>
                             </div>
@@ -137,12 +153,11 @@
                         </div> 
 
                     </form>
-                        <div class="login-register">
-                            <p>Sudah punya akun? <a href="{{url('login')}}">Login Disini...</a></p>
-                        </div> 
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
+</section>
+
+@endsection()

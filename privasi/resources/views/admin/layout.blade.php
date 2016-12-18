@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="shortcut icon" href={{asset('img/admin.jpg')}} />
   <title>@yield('title') | Kumpul Komunitas</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -62,7 +63,8 @@
   <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-  @if(Session::has('flash_message'))
+  
+    @if(Session::has('flash_message'))
     <div class="row">
       <div class="alert alert-success alert-dismissable fade in col-md-4 col-md-offset-4" align="center" id="success-alert">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -70,7 +72,6 @@
       </div>
     </div>
   @endif
-  
 <div class="wrapper">
     <header class="main-header">
       <!-- Logo -->
@@ -155,7 +156,7 @@
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-pie-chart"></i>
+            <i class="fa fa-table"></i>
             <span>Lihat Daftar</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -163,9 +164,9 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{url('/admin/kategori/DaftarKategori')}}"><i class="fa fa-circle-o"></i> Kategori </a></li>
-            <li><a href="{{url('/admin/thread/DaftarThread')}}"><i class="fa fa-circle-o"></i> Thread </a></li>
-            <li><a href="{{url('/admin/user/DaftarUser')}}"><i class="fa fa-circle-o"></i> User </a></li>
-            <li><a href="{{url('/admin/admin/DaftarAdmin')}}"><i class="fa fa-circle-o"></i> Admin </a></li>            
+            <li><a href="{{url('/admin/adminthread/DaftarThread')}}"><i class="fa fa-circle-o"></i> Thread </a></li>
+            <li><a href="{{url('/admin/account/DaftarAccount')}}"><i class="fa fa-circle-o"></i> Account </a></li>            
+            <li><a href="{{url('/admin/request/DaftarRequest')}}"><i class="fa fa-circle-o"></i> Request Komunitas </a></li>    
           </ul>
         </li>
 
