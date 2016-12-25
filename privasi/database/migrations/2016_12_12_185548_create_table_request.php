@@ -20,6 +20,7 @@ class CreateTableRequest extends Migration
             $table->text('deskipsi'); 
             $table->timestamps();
             $table->integer('disetujui');
+            $table->integer('post_id');
         });
     }
 

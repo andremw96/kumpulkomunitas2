@@ -90,6 +90,7 @@
           @endforeach()
         @endforeach()        
       </table>
+      
     </div>
 </section>
 @endsection

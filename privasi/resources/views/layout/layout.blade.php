@@ -144,6 +144,7 @@
                 </ul>
               </li>
               <li><a href="{{url('/regcommunity')}}">Daftar Komunitas</a></li>
+              <li><a href="{{url('calendar')}}">Calendar</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">            
               @if (Auth::guest())
@@ -196,7 +197,7 @@
                           Hello, {{ Auth::user()->username }} <span class="caret"></span>
                       </a>
 
-                      <ul class="dropdown-menu" role="menu">
+                       <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu" id="dropmenu">
                           <li>
                               <a href="{{ url('/logout') }}"
                                   onclick="event.preventDefault();
@@ -208,6 +209,11 @@
                                   {{ csrf_field() }}
                               </form>
                           </li>
+                           <li role="separator" class="divider"></li>
+                          <li class="dropdown-header">Pesan</li>
+                                <li><a tabindex="-1" href="{{ route('message.create') }}">Buat Pesan</a></li>
+                                <li><a href="{{ route('message.index') }}">List Pesan Terkirim</a></li>
+                                <li><a href="{{ url('/message/inbox') }}">List Pesan Masuk</a></li>
                       </ul>
                   </li>   
 
@@ -234,7 +240,7 @@
                         <hr>
                         <a href="" class="pull-right">Keluar</a>
                     </div>
-                  </div>                                     
+                  </div>                                            
               @endif 
           </ul>
         </div><!--/.nav-collapse -->
@@ -246,43 +252,38 @@
   <main class="page-row page-row-expanded">
     @yield('content')  
   </main>
-  
 
     <footer class="footer-distributed" class="page-row"><!--Footer-->
         <div class="footer-left">
-          <h3>Company<span>logo</span></h3>
+          <h3>My Community</h3>
           <p class="footer-links">
-            <a href="#">Home</a>
-            В·
-            <a href="#">Blog</a>
-            В·
-            <a href="#">Pricing</a>
-            В·
-            <a href="#">About</a>
-            В·
+            <a href="{{url('/')}}">Home</a>
+            ·
+            <a href="{{url('/about')}}">About</a>
+            ·
             <a href="#">Faq</a>
-            В·
-            <a href="#">Contact</a>
+            ·
+            <a href="{{url('/contact')}}">Contact</a>
           </p>
 
-          <p class="footer-company-name">Company Name &copy; 2015</p>
+          <p class="footer-company-name">My Community &copy; 2016</p>
         </div>
 
         <div class="footer-center">
 
           <div>
             <i class="fa fa-map-marker"></i>
-            <p><span>21 Revolution Street</span> Paris, France</p>
+            <p><span>21 Revolution Street</span> Semarang, Indonesia</p>
           </div>
 
           <div>
             <i class="fa fa-phone"></i>
-            <p>+1 555 123456</p>
+            <p>+000000000</p>
           </div>
 
           <div>
             <i class="fa fa-envelope"></i>
-            <p><a href="mailto:support@company.com">support@company.com</a></p>
+            <p><a href="mailto:support@company.com">support@mycommunity.com</a></p>
           </div>
 
         </div>
@@ -290,8 +291,8 @@
         <div class="footer-right">
 
           <p class="footer-company-about">
-            <span>About the company</span>
-            Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
+            <span>About the Web</span>
+            My Community adalah sebuah tempat di dunia maya yang mengumpulkan semua komunitas yang ada, untuk sharing dan lain - lain.
           </p>
 
           <div class="footer-icons">

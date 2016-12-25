@@ -55,6 +55,11 @@
       }
   </style>
 
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="{{asset('adminLTE/plugins/fullcalendar/fullcalendar.min.css')}}">
+  <link rel="stylesheet" href="{{asset('adminLTE/plugins/fullcalendar/fullcalendar.print.css')}}" media="print">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -170,51 +175,24 @@
           </ul>
         </li>
 
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Charts</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-table"></i> <span>Tables</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-            <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-          </ul>
-        </li>
         <li>
-          <a href="pages/calendar.html">
+          <a href="{{url('/admin/adminevent/calendar')}}">
             <i class="fa fa-calendar"></i> <span>Calendar</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red">3</small>
-              <small class="label pull-right bg-blue">17</small>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
         </li>
-        <li>
-          <a href="pages/mailbox/mailbox.html">
-            <i class="fa fa-envelope"></i> <span>Mailbox</span>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-envelope"></i> <span>Kotak Pesan</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-yellow">12</small>
-              <small class="label pull-right bg-green">16</small>
-              <small class="label pull-right bg-red">5</small>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          <ul class="treeview-menu">
+            <li><a href="{{url('/admin/adminmessage/inbox')}}"><i class="fa fa-circle-o"></i> Daftar Pesan Masuk </a></li>            
+          </ul>
         </li>
         <li class="treeview">
           <a href="#">
@@ -458,10 +436,9 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 2.3.7
+      <b>Admin Dashboard</b> 
     </div>
-    <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-    reserved.
+    <strong>Copyright &copy; 2016 My Community</strong>
   </footer>
 
 <!-- jQuery 2.2.3 -->
@@ -485,23 +462,25 @@
 
 <!-- daterangepicker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<script src="{{asset('adminLTE/plugins/daterangepicker/daterangepicker.js')}}"></script>
-<!-- datepicker -->
-<script src="{{asset('adminLTE/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="{{asset('adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+<!-- <script src="{{asset('adminLTE/plugins/daterangepicker/daterangepicker.js')}}"></script> -->
+<!-- datepicker 
+<script src="{{asset('adminLTE/plugins/datepicker/bootstrap-datepicker.js')}}"></script> -->
+<!-- Bootstrap WYSIHTML5 
+<script src="{{asset('adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script> -->
 <!-- Slimscroll -->
 <script src="{{asset('adminLTE/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('adminLTE/plugins/fastclick/fastclick.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('adminLTE/dist/js/app.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('adminLTE/dist/js/pages/dashboard.js')}}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) 
+<script src="{{asset('adminLTE/dist/js/pages/dashboard.js')}}"></script> -->
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('adminLTE/dist/js/demo.js')}}"></script>
 <!-- jQuery Knob Chart -->
-<script src="{{asset('plugins/knob/jquery.knob.js')}}"></script>
+<script src="{{asset('adminLTE/plugins/knob/jquery.knob.js')}}"></script>
+
+
 <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
@@ -516,5 +495,8 @@
           }, 5000);       
         });
     </script>
+
+
+    @yield('js')
 </body>
 </html>

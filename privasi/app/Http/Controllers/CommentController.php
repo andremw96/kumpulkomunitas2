@@ -12,21 +12,7 @@ use Illuminate\Support\Facades\View;
 
 class CommentController extends Controller
 {
-    public function __construct()
-    {
-        $subcate=new subcategory;
 
-        try {
-
-            $this->allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
-        view::share('allSubCategories', $this->allSubCategories);
-    }
     /**
      * Display a listing of the resource.
      *

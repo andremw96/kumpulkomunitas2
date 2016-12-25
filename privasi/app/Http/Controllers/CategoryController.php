@@ -16,23 +16,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        //$this->category = category::all(array('category'));
-       // $this->subcategory = subcategory::all(array('subcategory'));
-
-        //$this->comment = comment::all(array('comment', 'post_id'));
-       // $this->post = post::all(array('title', 'content'));
-        $subcate=new subcategory;
-
-        try {
-
-            $this->allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
-        view::share('allSubCategories', $this->allSubCategories);
+        
     }
 
     /**
@@ -43,7 +27,7 @@ class CategoryController extends Controller
     public function index()    
     {      
 
-        $category = DB::table('tblpost')
+        /*$category = DB::table('tblpost')
             ->select(DB::raw('category.id, category.category, count(tblpost.post_id) as JmlhPost, count(tblcomment.comment_id) as JmlhComment, max(  tblpost.updated_at) as LastPost, category.parent_id'))
             ->rightJoin('tblcomment', 'tblpost.post_id', '=', 'tblcomment.post_id')
             ->rightJoin('category', 'category.id', '=', 'tblpost.category_id')
@@ -51,7 +35,12 @@ class CategoryController extends Controller
             ->whereNull('tblcomment.deleted_at')
             ->whereNull('category.deleted_at')
             ->groupBy('category.category')
-            ->paginate(15);
+            ->paginate(15);*/
+
+        $category = DB::table('JmlhPost')
+                  ->select(DB::raw('jmlhpost.id, jmlhpost.category, ifnull(jmlhpost.JmlhPost, 0) as JmlhPost, ifnull(jmlhcomment.JmlhComment,0) as JmlhComment, ifnull(jmlhcomment.LastPost, "0000-00-00 00:00:00") as LastPost'))
+                  ->leftJoin('jmlhcomment', 'jmlhpost.id', '=', 'jmlhcomment.category_id')
+                  ->paginate(15);
 
         return view("/admin/kategori/DaftarKategori", compact('category'));
     }

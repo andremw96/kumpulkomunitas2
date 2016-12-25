@@ -7,11 +7,13 @@ use App\thread;
 use App\comment;
 use App\subcategory;
 use App\category;
+use App\Event;
 //use Input;
 //use DB;
 use Redirect;
 use Illuminate\Support\Facades\View;
 use Auth;
+use DateTime;
 
 class ThreadController extends Controller
 {
@@ -45,26 +47,7 @@ class ThreadController extends Controller
 
         return view('forum/TheLounge', compact('forumthread'));
     }*/
-    public function __construct()
-    {
-        //$this->category = category::all(array('category'));
-       // $this->subcategory = subcategory::all(array('subcategory'));
 
-        //$this->comment = comment::all(array('comment', 'post_id'));
-       // $this->post = post::all(array('title', 'content'));
-        $subcate=new subcategory;
-
-        try {
-
-            $this->allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
-        view::share('allSubCategories', $this->allSubCategories);
-    }
 
 
     /**
@@ -127,7 +110,9 @@ class ThreadController extends Controller
         $categoryid = $thread->category_id;
         $CariKategori = category::where('id', '=', $categoryid)->get();
 
-        return view("forum/content", compact('IsiThread', 'IsiComment', 'CariKategori'));
+        $CariEvent = Event::where('post_id', '=', $post_id)->get();
+
+        return view("forum/content", compact('IsiThread', 'IsiComment', 'CariKategori', 'CariEvent'));
     }
 
     /**
@@ -185,5 +170,41 @@ class ThreadController extends Controller
         // redirect
         \Session::flash('flash_message', 'Thread sudah terhapuss..!!');
         return redirect('/');
+    }
+
+    public function BuatAgenda($post_id)
+    {
+        $thread = thread::findOrFail($post_id);
+        return view('forum/BuatAgenda', compact('thread'));
+    }
+
+    public function SimpanAgenda(Request $request)
+    {
+         $time = explode(" - ", $request->input('time'));
+          
+         $event = new Event;
+         $event->user_id = $request->input('userid');
+         $event->title = $request->input('title');
+         $event->post_id = $request->input('postid');
+         $event->komunitas = $request->input('komunitas');
+         $event->start_time = $time[0];
+         $event->end_time = $time[1];
+         $event->save();
+          
+         \Session::flash('flash_message', 'Event sudah Terbuat..!!');
+        return redirect()->action('ThreadController@show', [$request->input('postid')]);
+    }
+
+    public function format_interval(\DateInterval $interval)
+    {
+        $result = "";
+        if ($interval->y) { $result .= $interval->format("%y year(s) "); }
+        if ($interval->m) { $result .= $interval->format("%m month(s) "); }
+        if ($interval->d) { $result .= $interval->format("%d day(s) "); }
+        if ($interval->h) { $result .= $interval->format("%h hour(s) "); }
+        if ($interval->i) { $result .= $interval->format("%i minute(s) "); }
+        if ($interval->s) { $result .= $interval->format("%s second(s) "); }
+        
+        return $result;
     }
 }
