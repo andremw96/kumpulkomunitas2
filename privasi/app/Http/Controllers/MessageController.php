@@ -28,7 +28,7 @@ class MessageController extends Controller
                  ->join('users', 'message.user_id_penerima', '=', 'users.id')
                  ->where('message.user_id_pengirim', '=', $user_id)
                  ->get();
-        return view('admin/adminMessage/ListSentMessage', compact('message'));
+        return view('message/ListSentMessage', compact('message'));
     }
 
     public function inbox()
@@ -40,7 +40,7 @@ class MessageController extends Controller
                  ->join('users', 'message.user_id_pengirim', '=', 'users.id')
                  ->where('message.user_id_penerima', '=', $user_id)
                  ->get();
-        return view('admin/adminMessage/ListInbox', compact('message'));
+        return view('Message/ListInbox', compact('message'));
     }
 
     /**
