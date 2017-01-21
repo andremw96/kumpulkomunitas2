@@ -53,14 +53,17 @@
       </ol>      
 
       <ol>
-        <div class="col-lg-3" style="margin-left: 66%">
-            <div class="input-group">
-              <input type="text" class="form-control" aria-label="..." placeholder="Cari..">
-              <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"><img src="img/cari.png"></button>
-              </span>
+         <form method="POST" action="{{ url('/search') }}" role="search"> 
+            {{ csrf_field() }}
+            <div class="col-lg-3" style="margin-left: 66%">
+                <div class="input-group">               
+                  <input type="text" class="form-control" aria-label="..." placeholder="Cari.." name="query">
+                  <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><img src="img/cari.png"></button>
+                  </span>
+                </div>
             </div>
-          </div>
+         </form>
       </ol>
       <div class="clearfix"></div> 
     </div>
@@ -90,6 +93,7 @@
           @endforeach()
         @endforeach()        
       </table>
+      
     </div>
 </section>
 @endsection

@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class thread extends Model
 {
 	use SoftDeletes;
+	use Searchable;
 
     protected $primaryKey = 'post_id';
     protected $table = 'tblpost';

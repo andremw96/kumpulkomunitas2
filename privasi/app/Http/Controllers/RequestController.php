@@ -8,9 +8,14 @@ use App\User;
 use App\thread;
 use DB;
 use Illuminate\Http\Request;
+use Auth;
 
 class RequestController extends Controller
 {
+        public function __construct()
+    {
+        
+    }
     /**
      * Display a listing of the resource.
      *
@@ -62,6 +67,12 @@ class RequestController extends Controller
         DB::table('requestcom')
             ->where('id', $request->request_id)
             ->update(['disetujui' => 1, 'post_id' => $post_id]);
+        $idPengirim = Auth::id();
+        $Isi = 'Hallo, Thread Request anda sudah berhasil dibuat, <a href="{{ route("thread.show", $post_id )}}">klik disini</a> untuk melihat';
+        $datetime=date("Y-m-d h:i:sa");
+        DB::table('message')->insert(
+            ['user_id_pengirim' => $idPengirim, 'user_id_penerima' => $request->userid, 'title' => 'Thread Dibuat', 'isi' => $Isi, 'created_at' => $datetime, 'updated_at' => $datetime]
+        );
 
         return redirect()->action('RequestController@index');
     }

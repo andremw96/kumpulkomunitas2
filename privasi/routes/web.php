@@ -20,12 +20,16 @@
 });*/
 
 //Route::get('/hello/{name}', 'Hello@show');
-
 Route::get('/','FrontControl@index');
 Route::get('/about','FrontControl@about');
 Route::get('/regcommunity','FrontControl@DaftarKomunitas');
 Route::post('/simpanrequest','FrontControl@SimpanRequest');
 Route::get('/contact','FrontControl@contact');
+
+Route::any('/search', [
+    'as' => 'api.search',
+    'uses' => 'Api\SearchController@search'
+]);
 //Route::get('/calendar','FrontControl@calendar');
 //Route::get('/login','FrontControl@login');
 //Route::get('/signup','FrontControl@signup');
@@ -58,8 +62,32 @@ Route::get('/forum/{category}', function($categoryid){
 });
 
 Route::resource('thread', 'ThreadController');
+Route::get('/forum/BuatAgenda/{post_id}', 'ThreadController@BuatAgenda');
+Route::post('/simpanagenda','ThreadController@SimpanAgenda');
 Route::resource('comment', 'CommentController');
 Route::get('/calendar', 'EventController@lihatCalendar');
+Route::get('/message/inbox', 'MessageController@inbox');
+Route::get('/message/inbox/{id}', 'MessageController@ShowInbox');
+Route::get('/message/balaspesan/{user_id_pengirim}', 'MessageController@BalasPesan');
+Route::resource('message', 'MessageController');
+
+Route::get('/user/Lihatuser/{id}', function($iddd) {
+	$IsiAccount = App\User::findOrFail($iddd);
+    //$IsiAccount = App\User::where('id', '=', $iddd)->get();
+    $subcate=new App\subcategory;
+        
+    try {
+
+        $allSubCategories=$subcate->getCategories();
+        
+    } catch (Exception $e) {
+        
+        //no parent category found
+    }
+
+    return view('/user/Lihatuser', compact('IsiAccount', "allSubCategories"));
+});
+
 
 Route::resource('events', 'EventController');
 Route::get('/api', function () {
@@ -99,13 +127,30 @@ Route::post('/admin/register', 'AuthAdmin\RegisterController@register');*/
 
 Route::get('/admin', ['middleware' => ['auth', 'admin'], function() {
     // this page requires that you be logged in AND be an Admin
-    return view( '/admin/dashboard' );
+    $trackers = App\Tracker::all();
+     $User = App\User::all();
+    //return view('admin/statistik', compact('trackers'));
+
+    return view( '/admin/dashboard', compact('trackers', 'User'));
 }]);
 
+
 Route::get('/admin/kategori/DaftarKategori', 'CategoryController@index')->middleware('auth', 'admin');
+
 Route::get('/admin/account/DaftarAccount', 'AccountController@index')->middleware('auth', 'admin');
+
 Route::get('/admin/request/DaftarRequest', 'RequestController@index')->middleware('auth', 'admin');
+
 Route::get('/admin/adminthread/DaftarThread', 'AdminThreadController@index')->middleware('auth', 'admin');
+
+Route::get('/admin/adminmessage/inbox', 'AdminMessageController@inbox')->middleware('auth', 'admin');
+Route::get('/admin/adminmessage/inbox/{id}', 'AdminMessageController@ShowInbox')->middleware('auth', 'admin');
+Route::get('/admin/adminmessage/balaspesan/{user_id_pengirim}', 'AdminMessageController@BalasPesan')->middleware('auth', 'admin');
+
+Route::get('/admin/adminmessage/ListSentMessage', 'AdminMessageController@index')->middleware('auth', 'admin');
+
+Route::get('/admin/adminevent/calendar', 'AdminEventController@lihatCalendar')->middleware('auth', 'admin');
+
 Route::get('/admin/request/create/{id}', 'RequestController@create')->middleware('auth', 'admin');
 
 Route::group(['middleware' => ['auth', 'admin']], function() {
@@ -113,6 +158,8 @@ Route::group(['middleware' => ['auth', 'admin']], function() {
 	Route::resource('/admin/account', 'AccountController');
 	Route::resource('/admin/request', 'RequestController', ['except' => 'create']);
 	Route::resource('/admin/adminthread', 'AdminThreadController');
+	Route::resource('/admin/adminmessage', 'AdminMessageController');
+	Route::resource('/admin/adminevent', 'AdminEventController');
 });
 
 

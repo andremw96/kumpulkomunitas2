@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use DB;
 
 //use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,7 @@ class subcategory
 
     public function getCategories(){
 
-        $categories=\App\Category::where('parent_id',0)->get();//united
+        $categories = category::where('parent_id',0)->get();//united
 
         $categories=$this->addRelation($categories);
 
@@ -24,7 +25,7 @@ class subcategory
 
     protected function selectChild($id)
     {
-        $categories=\App\Category::where('parent_id',$id)->get(); //rooney
+        $categories= category::where('parent_id',$id)->get(); //rooney
 
         $categories=$this->addRelation($categories);
 

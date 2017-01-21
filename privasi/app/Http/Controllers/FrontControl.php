@@ -9,7 +9,9 @@ use App\category;
 use App\subcategory;
 use App\RequestCom;
 use App\thread;
+use App\Tracker;
 use Auth;
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 
@@ -24,29 +26,7 @@ class FrontControl extends Controller
     var $title;
     var $description;
 
-    protected $allSubCategories;
 
-
-    public function __construct()
-    {
-        //$this->category = category::all(array('category'));
-       // $this->subcategory = subcategory::all(array('subcategory'));
-
-        //$this->comment = comment::all(array('comment', 'post_id'));
-       // $this->post = post::all(array('title', 'content'));
-        $subcate=new subcategory;
-
-        try {
-
-            $this->allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
-        view::share('allSubCategories', $this->allSubCategories);
-    }
 
     public function index()
     {
@@ -65,6 +45,7 @@ class FrontControl extends Controller
             
             //no parent category found
         }
+
 
         //view::share('allSubCategories', $allSubCategories);
         

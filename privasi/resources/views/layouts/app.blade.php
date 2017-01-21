@@ -19,6 +19,11 @@
             'csrfToken' => csrf_token(),
         ]); ?>
     </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/highcharts.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/exporting.js')}}"></script>
+    
 </head>
 <body>
     <div id="app">

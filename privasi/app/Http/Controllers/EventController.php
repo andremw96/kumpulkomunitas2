@@ -8,25 +8,10 @@ use Illuminate\Support\Facades\View;
 use App\subcategory;
 use DateTime;
 use App\User;
+use App\Http\Controllers\Controller;
 
 class EventController extends Controller
 {
-	public function __construct()
-    {
-
-        $subcate=new subcategory;
-
-        try {
-
-            $this->allSubCategories=$subcate->getCategories();
-            
-        } catch (Exception $e) {
-            
-            //no parent category found
-        }
-
-        view::share('allSubCategories', $this->allSubCategories);
-    }
 
     public function lihatCalendar()
     {

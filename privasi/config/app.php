@@ -179,6 +179,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         MaddHatter\LaravelFullcalendar\ServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
 
     ],
 

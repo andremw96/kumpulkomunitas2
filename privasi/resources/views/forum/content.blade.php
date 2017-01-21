@@ -29,9 +29,9 @@
 
 			 @foreach($IsiThread as $JudulThread)	         
 	         	@if (Auth::guest())		
-			
+
 				@elseif (Auth::id() === $JudulThread->user_id)				
-				   <a href="{{ url('events/create') }}" type="submit" button type="button" class="btn btn-primary btn-xs pull-right">Buat Agenda Pertemuan</a>
+				   <a href="{{ url('forum/BuatAgenda/'. $JudulThread->post_id) }}" type="submit" button type="button" class="btn btn-primary btn-xs pull-right">Buat Agenda Pertemuan</a>
 				@endif
 				<h3 class="panel-title">Judul Thread : {{ $JudulThread->title }} </h3>
 	         @endforeach()
@@ -41,7 +41,7 @@
 	    	@foreach($IsiThread as $Isi)   
 	       		<label>Posted By: {{ $Isi -> username}} </label>    	
 	       		<label>Date time posted : {{ $Isi -> updated_at}} </label>		       		
-		        <p class='well'>{{ $Isi -> content}}</p>		        
+		        <p class='well'>{{{ $Isi -> content }}}</p>	        
 		        @if (Auth::guest())
 
 		        @elseif ((Auth::id() === $Isi->user_id)	or (Auth::user()->HakAkses === 'Admin'))
@@ -62,6 +62,12 @@
 
 		        @endif        
 	        @endforeach()
+	        	<label>Agenda Pertemuan </label>
+	        	<div class="list-group">
+	        		@foreach($CariEvent as $ListEvent)
+				  		<a href="{{ url('events/' . $ListEvent->id) }}" class="list-group-item" target="_blank">{{$ListEvent->title}} Waktu : {{ date("g:ia\, jS M Y", strtotime($ListEvent->start_time)) . ' until ' . date("g:ia\, jS M Y", strtotime($ListEvent->end_time)) }}</a>
+				  	@endforeach()
+				</div>	
 	       <br>
 	       <hr>
 	       <div id="comments">
