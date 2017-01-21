@@ -71,6 +71,7 @@ Route::get('/message/inbox/{id}', 'MessageController@ShowInbox');
 Route::get('/message/balaspesan/{user_id_pengirim}', 'MessageController@BalasPesan');
 Route::resource('message', 'MessageController');
 
+
 Route::get('/user/Lihatuser/{id}', function($iddd) {
 	$IsiAccount = App\User::findOrFail($iddd);
     //$IsiAccount = App\User::where('id', '=', $iddd)->get();

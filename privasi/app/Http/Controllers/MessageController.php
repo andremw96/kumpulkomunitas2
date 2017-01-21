@@ -40,6 +40,7 @@ class MessageController extends Controller
                  ->join('users', 'message.user_id_pengirim', '=', 'users.id')
                  ->where('message.user_id_penerima', '=', $user_id)
                  ->get();
+
         return view('message/ListInbox', compact('message'));
     }
 
